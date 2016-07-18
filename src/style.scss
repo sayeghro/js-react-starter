@@ -4,6 +4,7 @@ body {
   background: darken(white, 10%);
   margin: 50px;
   word-wrap: break-word;
+  display: block;
 }
 
 h1 {
@@ -24,14 +25,15 @@ input {
   width: 90%;
   font-size: 18px;
   padding: 0.2em;
-  margin: 0.1em 0.2em;
+  margin: 0.1em 0;
   box-sizing: content-box;
 }
 
 button {
   font-size: 18px;
+  width: 9%;
   padding: 0.2em;
-  margin: 0.1em 0.2em;
+  margin: 0.1em 0;
   box-sizing: content-box;
 }
 
@@ -74,7 +76,19 @@ button {
 .noteBody > p > *{
   max-width:  475px;
 }
+.noteBody > p {
+  max-width:  475px;
+}
 
-.markdown_box{
+.master_flex {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
 
+.draggable_area{
+  box-sizing: content-box;
+  width: calc(100% - 100px);
+  min-height: calc(100% - 85px);
+  position: absolute;
 }

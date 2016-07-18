@@ -12,6 +12,7 @@ class App extends Component {
     // init component state here
     this.state = {
       notes: Immutable.Map(),
+      maxzIndex: 0,
     };
 
     this.addNote = this.addNote.bind(this);
@@ -23,8 +24,8 @@ class App extends Component {
     const noteInstance = {
       title,
       text: '',
-      x: 0,
-      y: 0,
+      x: 25,
+      y: 10,
       zIndex: 0,
     };
     this.setState({
@@ -39,15 +40,17 @@ class App extends Component {
   updateNote(id, newNote) {
     this.setState({
       notes: this.state.notes.update(id, (note) => { return Object.assign({}, note, newNote); }),
+      maxzIndex: this.state.maxzIndex + 1,
     });
-    console.log(this.state.notes);
   }
 
   render() {
     return (
-      <div>
+      <div className="master_flex">
         <CreateBar addNote={this.addNote} />
-        {this.state.notes.entrySeq().map(([id, note]) => <Note key={id} id={id} note={note} deleteNote={this.deleteNote} updateNote={this.updateNote} />)}
+        <div className="draggable_area">
+          {this.state.notes.entrySeq().map(([id, note]) => <Note key={id} id={id} note={note} maxzIndex={this.state.maxzIndex} deleteNote={this.deleteNote} updateNote={this.updateNote} />)}
+        </div>
       </div>
     );
   }
