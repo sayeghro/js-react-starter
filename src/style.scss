@@ -3,4 +3,78 @@ body {
   color: rgb(10%, 10%, 10%);
   background: darken(white, 10%);
   margin: 50px;
+  word-wrap: break-word;
+}
+
+h1 {
+  font-size: 18px;
+  font-weight: bold;
+  word-wrap: break-word;
+}
+
+textarea {
+  min-width: 180px;
+  max-width:  calc(90%);
+}
+
+i {
+  cursor: pointer;
+}
+input {
+  width: 90%;
+  font-size: 18px;
+  padding: 0.2em;
+  margin: 0.1em 0.2em;
+  box-sizing: content-box;
+}
+
+button {
+  font-size: 18px;
+  padding: 0.2em;
+  margin: 0.1em 0.2em;
+  box-sizing: content-box;
+}
+
+.bar_container {
+  display: flex;
+  justify-content: center;
+}
+
+.paddleft {
+  padding-left: 10px;
+}
+
+.note_container {
+  position: absolute;
+  display: inline-block;
+  box-sizing: border-box;
+  padding: 0 10px;
+  background-color: #FFFFFF;
+  border-radius: 2px;
+  box-shadow: 5px 5px 2px #888888;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toolbar_leftflex {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.toolbar_leftflex > h1{
+  max-width: 400px;
+  overflow: hidden;
+}
+
+.noteBody > p > *{
+  max-width:  475px;
+}
+
+.markdown_box{
+
 }
