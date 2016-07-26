@@ -3,6 +3,8 @@ import Immutable from 'immutable';
 
 import Note from './Note';
 import CreateBar from './CreateBar';
+import firebase from '../firebase';
+
 
 // example class based component (smart component)
 class App extends Component {
@@ -19,38 +21,43 @@ class App extends Component {
     this.deleteNote = this.deleteNote.bind(this);
     this.updateNote = this.updateNote.bind(this);
   }
-  addNote(title) {
+  componentDidMount() {
+    console.log('feteched from firebase');
+    firebase.fetchNotes((snapshot) => {
+      this.setState({
+        notes: Immutable.Map(snapshot.val()),
+      });
+    });
+  }
+
+  addNote(myTitle) {
     const id = Math.random().toString(36).substr(2, 9);
     const noteInstance = {
-      title,
+      title: myTitle,
       text: '',
       x: 25,
       y: 10,
       zIndex: 0,
+      isEditor: false,
     };
-    this.setState({
-      notes: this.state.notes.set(id, noteInstance),
-    });
+    firebase.addNote(id, noteInstance);
   }
+
   deleteNote(id) {
-    this.setState({
-      notes: this.state.notes.delete(id),
-    });
+    firebase.deleteNote(id);
   }
   updateNote(id, newNote) {
-    this.setState({
-      notes: this.state.notes.update(id, (note) => { return Object.assign({}, note, newNote); }),
-      maxzIndex: this.state.maxzIndex + 1,
-    });
+    firebase.updateNote(id, newNote);
   }
 
   render() {
     return (
       <div className="master_flex">
         <CreateBar addNote={this.addNote} />
-        <div className="draggable_area">
-          {this.state.notes.entrySeq().map(([id, note]) => <Note key={id} id={id} note={note} maxzIndex={this.state.maxzIndex} deleteNote={this.deleteNote} updateNote={this.updateNote} />)}
-        </div>
+          {this.state.notes.entrySeq().map(([id, note]) =>
+            <Note key={id} id={id} note={note} maxzIndex={this.state.maxzIndex}
+              deleteNote={this.deleteNote} updateNote={this.updateNote} onEdit={this.onEdit}
+            />)}
       </div>
     );
   }

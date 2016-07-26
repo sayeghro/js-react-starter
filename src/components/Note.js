@@ -12,15 +12,6 @@ class Note extends Component {
       updateNote: React.PropTypes.func,
     };
 
-    this.state = {
-      id: this.props.id,
-      title: this.props.note.title,
-      text: this.props.note.text,
-      x: this.props.note.x,
-      y: this.props.note.y,
-      zIndex: this.props.note.zIndex,
-      isEditor: false,
-    };
     this.onEdit = this.onEdit.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
     this.handleDrag = this.handleDrag.bind(this);
@@ -31,46 +22,82 @@ class Note extends Component {
 
   // Set state change
   onEdit(event) {
-    if (this.state.isEditor) {
-      this.setState({ isEditor: false });
-      this.props.updateNote(this.state.id, this.state);
+    if (this.props.note.isEditor) {
+      this.props.updateNote(this.props.id, {
+        title: this.props.note.title,
+        text: this.props.note.text,
+        x: this.props.note.x,
+        y: this.props.note.y,
+        zIndex: this.props.note.zIndex,
+        isEditor: false,
+      });
     } else {
-      this.setState({ isEditor: true });
+      this.props.updateNote(this.props.id, {
+        title: this.props.note.title,
+        text: this.props.note.text,
+        x: this.props.note.x,
+        y: this.props.note.y,
+        zIndex: this.props.note.zIndex,
+        isEditor: true,
+      });
     }
   }
+
   onDelete(event) {
-    this.props.deleteNote(this.state.id);
+    this.props.deleteNote(this.props.id);
   }
+
   onInputChange(event) {
-    this.setState({ text: event.target.value });
-  }
-  onStartDrag() {
-    this.setState({ zIndex: this.props.maxzIndex + 1 });
-    this.props.updateNote(this.state.id, this.state);
-  }
-  onStopDrag() {
-    this.props.updateNote(this.state.id, this.state);
-  }
-  handleDrag(e, ui) {
-    const StateX = this.state.x;
-    const StateY = this.state.y;
-    this.setState({
-      x: StateX + ui.deltaX,
-      y: StateY + ui.deltaY,
+    this.props.updateNote(this.props.id, {
+      title: this.props.note.title,
+      text: event.target.value,
+      x: this.props.note.x,
+      y: this.props.note.y,
+      zIndex: this.props.note.zIndex,
+      isEditor: this.props.note.isEditor,
     });
   }
-  MarkItUp() {
-    return { __html: marked(this.state.text) };
+
+  onStartDrag() {
+    this.props.updateNote(this.props.id, {
+      title: this.props.note.title,
+      text: this.props.note.text,
+      x: this.props.note.x,
+      y: this.props.note.y,
+      zIndex: this.props.maxzIndex + 1,
+      isEditor: this.props.note.isEditor,
+    });
   }
+
+  onStopDrag() {
+    this.props.updateNote(this.props.id, this.props.note);
+  }
+
+  handleDrag(e, ui) {
+    this.props.updateNote(this.props.id, {
+      title: this.props.note.title,
+      text: this.props.note.text,
+      x: this.props.note.x + ui.deltaX,
+      y: this.props.note.y + ui.deltaY,
+      zIndex: this.props.note.zIndex,
+      isEditor: this.props.note.isEditor,
+    });
+  }
+
+  MarkItUp() {
+    return { __html: marked(this.props.note.text) };
+  }
+
   renderTheBox() {
-    if (this.state.isEditor) {
-      return <textarea onChange={this.onInputChange} className="markdown_box" defaultValue={this.state.text}></textarea>;
+    if (this.props.note.isEditor) {
+      return <textarea onChange={this.onInputChange} className="markdown_box" value={this.props.note.text}></textarea>;
     } else {
       return <div className="noteBody" dangerouslySetInnerHTML={this.MarkItUp()}></div>;
     }
   }
+
   renderIcon() {
-    if (this.state.isEditor) {
+    if (this.props.note.isEditor) {
       return <i className="fa fa-check paddleft" aria-hidden="true" onClick={this.onEdit}></i>;
     } else {
       return <i className="fa fa-pencil paddleft" aria-hidden="true" onClick={this.onEdit}></i>;
@@ -83,16 +110,15 @@ class Note extends Component {
         handle=".note-mover"
         grid={[25, 25]}
         defaultPosition={{ x: this.props.note.x, y: this.props.note.y }}
-        position={null}
+        position={{ x: this.props.note.x, y: this.props.note.y }}
         onStart={this.onStartDrag}
         onDrag={this.handleDrag}
         onStop={this.onStopDrag}
-        bounds="parent"
       >
-        <div className="note_container" style={{ zIndex: this.state.zIndex }}>
+        <div className="note_container" style={{ zIndex: this.props.note.zIndex }}>
           <div className="toolbar">
             <div className="toolbar_leftflex">
-              <h1>{this.state.title}</h1>
+              <h1>{this.props.note.title}</h1>
               <i className="fa fa-trash-o paddleft" aria-hidden="true" onClick={this.onDelete}></i>
               {this.renderIcon()}
             </div>
