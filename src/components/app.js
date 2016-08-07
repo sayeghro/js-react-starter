@@ -48,7 +48,7 @@ class App extends Component {
     return (
       <div className="master_flex">
         <CreateBar addNote={this.addNote} />
-        <div className="draggable_area">
+        <div>
           {this.state.notes.entrySeq().map(([id, note]) => <Note key={id} id={id} note={note} maxzIndex={this.state.maxzIndex} deleteNote={this.deleteNote} updateNote={this.updateNote} />)}
         </div>
       </div>

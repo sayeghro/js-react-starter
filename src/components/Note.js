@@ -87,7 +87,6 @@ class Note extends Component {
         onStart={this.onStartDrag}
         onDrag={this.handleDrag}
         onStop={this.onStopDrag}
-        bounds="parent"
       >
         <div className="note_container" style={{ zIndex: this.state.zIndex }}>
           <div className="toolbar">
