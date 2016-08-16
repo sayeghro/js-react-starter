@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Immutable from 'immutable';
+import io from 'socket.io-client';
+const socketserver = 'http://localhost:9090';
 
 import Note from './Note';
 import CreateBar from './CreateBar';
@@ -8,6 +10,12 @@ import CreateBar from './CreateBar';
 class App extends Component {
   constructor(props) {
     super(props);
+
+    this.socket = io(socketserver);
+    this.socket.on('connect', () => { console.log('socket.io connected'); });
+    this.socket.on('disconnect', () => { console.log('socket.io disconnected'); });
+    this.socket.on('reconnect', () => { console.log('socket.io reconnected'); });
+    this.socket.on('error', (error) => { console.log(error); });
 
     // init component state here
     this.state = {
